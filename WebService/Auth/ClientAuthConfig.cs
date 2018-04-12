@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Azure.IoTSolutions.DeviceSimulation.WebService.Auth
+namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Auth
 {
     public interface IClientAuthConfig
     {

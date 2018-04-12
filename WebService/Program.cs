@@ -3,6 +3,7 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime;
+using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Diagnostics;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
 {
@@ -11,7 +12,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
     {
         public static void Main(string[] args)
         {
-            var config = new Config(new ConfigData());
+            var config = new Config(new ConfigData(new Logger(Uptime.ProcessId)));
 
             /*
             Print some information to help development and debugging, like

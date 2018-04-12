@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Diagnostics;
 
-namespace Microsoft.Azure.IoTSolutions.DeviceSimulation.WebService.Auth
+namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Auth
 {
     /// <summary>
     /// Validate every incoming request checking for a valid authorization header.

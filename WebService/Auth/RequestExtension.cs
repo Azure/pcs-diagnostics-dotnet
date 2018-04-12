@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace Microsoft.Azure.IoTSolutions.DeviceSimulation.WebService.Auth
+namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Auth
 {
     public static class RequestExtension
     {

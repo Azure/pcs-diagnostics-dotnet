@@ -66,7 +66,7 @@ run_in_sandbox() {
         # Depending on which settings and which dependencies are needed,
         # edit the list of variables.
         docker run -it \
-            -p 9007:9007 \
+            -p 9006:9006 \
             -v "$PCS_CACHE/sandbox/.config:/root/.config" \
             -v "$PCS_CACHE/sandbox/.dotnet:/root/.dotnet" \
             -v "$PCS_CACHE/sandbox/.nuget:/root/.nuget" \

@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:9007/",
+      "applicationUrl": "http://localhost:9006/",
       "sslPort": 0
     }
   },
@@ -11,17 +11,17 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:9007/v1/status",
+      "launchUrl": "http://localhost:9006/v1/status",
       "environmentVariables": {
       }
     },
     "WebService": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:9007/v1/status",
+      "launchUrl": "http://localhost:9006/v1/status",
       "environmentVariables": {
       },
-      "applicationUrl": "http://localhost:9007/v1/status"
+      "applicationUrl": "http://localhost:9006/v1/status"
     }
   }
 }

@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime;
 
-namespace Microsoft.Azure.IoTSolutions.DeviceSimulation.WebService.Auth
+namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Auth
 {
     public class Startup
     {

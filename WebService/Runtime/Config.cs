@@ -3,7 +3,7 @@
 using System;
 using System.IO;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime;
-using Microsoft.Azure.IoTSolutions.DeviceSimulation.WebService.Auth;
+using Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Auth;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
 {
@@ -24,6 +24,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
     {
         private const string APPLICATION_KEY = "diagnostics:";
         private const string PortKey = APPLICATION_KEY + "webservice_port";
+        private const string DIAGNOSTICS_BACKEND_SERVICE_URI_KEY = APPLICATION_KEY + "endpoint_url";
 
         private const string CLIENT_AUTH_KEY = APPLICATION_KEY + "ClientAuth:";
         private const string CORS_WHITELIST_KEY = CLIENT_AUTH_KEY + "cors_whitelist";
@@ -36,11 +37,11 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
         private const string JWT_AUDIENCE_KEY = JWT_KEY + "audience";
         private const string JWT_CLOCK_SKEW_KEY = JWT_KEY + "clock_skew_seconds";
 
-        /// <summary>Client auth configuration</summary>
-        public IClientAuthConfig ClientAuthConfig { get; }
-
         /// <summary>Web service listening port</summary>
         public int Port { get; }
+
+        /// <summary>Client auth configuration</summary>
+        public IClientAuthConfig ClientAuthConfig { get; }
 
         /// <summary>Service layer configuration</summary>
         public IServicesConfig ServicesConfig { get; }
@@ -49,7 +50,10 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
         {
             this.Port = configData.GetInt(PortKey);
 
-            this.ServicesConfig = new ServicesConfig();
+            this.ServicesConfig = new ServicesConfig
+            {
+                DiagnosticsEndpointUrl = configData.GetString(DIAGNOSTICS_BACKEND_SERVICE_URI_KEY)
+            };
 
             this.ClientAuthConfig = new ClientAuthConfig
             {

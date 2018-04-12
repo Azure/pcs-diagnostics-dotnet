@@ -23,8 +23,10 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
         private readonly IConfigurationRoot configuration;
         private readonly ILogger log;
 
-        public ConfigData()
+        public ConfigData(ILogger logger)
         {
+            this.log = logger;
+
             // More info about configuration at
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration
 

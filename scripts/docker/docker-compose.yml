@@ -11,6 +11,6 @@ version: "3"
 
 services:
   diagnostics:
-    image: azureiotpcs/diagnostics-dotnet:0.x.y
+    image: azureiotpcs/pcs-diagnostics-dotnet:testing
     ports:
-      - "9007:9007"
+      - "9006:9006"
