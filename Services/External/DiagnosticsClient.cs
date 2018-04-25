@@ -27,8 +27,15 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
 
         public async Task<bool> SendAsync(string data)
         {
+            var endpointUrl = this.config.DiagnosticsEndpointUrl;
+
+            if (string.IsNullOrEmpty((endpointUrl)))
+            {
+                return false;
+            }
+
             var request = new HttpRequest();
-            request.SetUriFromString(this.config.DiagnosticsEndpointUrl);
+            request.SetUriFromString(endpointUrl);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
             request.SetContent(content);
             var response = await this.httpClient.PostAsync(request);

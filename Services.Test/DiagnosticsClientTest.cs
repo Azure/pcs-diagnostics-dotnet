@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
+using System.Net;
+using System.Net.Http.Headers;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.External;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Http;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models;
@@ -15,7 +17,6 @@ namespace Services.Test.External
     {
         private const string DIAGNOSTICS_SERVICE_URL = @"http://diagnostics";
         private readonly Mock<IHttpClient> mockHttpClient;
-        private readonly DiagnosticsClient target;
         private readonly DiagnosticsEventsServiceModel data;
 
         public DiagnosticsClientTest()
@@ -29,13 +30,6 @@ namespace Services.Test.External
                 SolutionType = "MockSolutionType",
                 Timestamp = DateTimeOffset.UtcNow,
             };
-
-            this.target = new DiagnosticsClient(
-                this.mockHttpClient.Object,
-                new ServicesConfig
-                {
-                    DiagnosticsEndpointUrl = DIAGNOSTICS_SERVICE_URL
-                });
         }
 
         [Fact]
@@ -44,12 +38,34 @@ namespace Services.Test.External
             // Arrange
             var response = new HttpResponse();
 
+            DiagnosticsClient target = new DiagnosticsClient(
+                this.mockHttpClient.Object,
+                new ServicesConfig
+                {
+                    DiagnosticsEndpointUrl = DIAGNOSTICS_SERVICE_URL
+                });
+
             this.mockHttpClient
                 .Setup(x => x.PostAsync(It.IsAny<IHttpRequest>()))
                 .ReturnsAsync(response);
 
             // Act
-            var result = this.target.SendAsync(JsonConvert.SerializeObject(this.data)).Result;
+            var result = target.SendAsync(JsonConvert.SerializeObject(this.data)).Result;
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void ItReturnsFalseOnEmptyDiagnosticsEndpointUrl()
+        {
+            // Arrange
+            DiagnosticsClient target = new DiagnosticsClient(
+                this.mockHttpClient.Object,
+                new ServicesConfig());
+
+            // Act
+            var result = target.SendAsync(JsonConvert.SerializeObject(this.data)).Result;
 
             // Assert
             Assert.False(result);
