@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Http;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime;
-using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Diagnostics;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
 {

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models;
+using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.v1.Models
 {
@@ -19,15 +20,15 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.v1.Models
         {
         }
 
-        public DiagnosticsEventsServiceModel ToServiceModel()
+        public DiagnosticsEventsServiceModel ToServiceModel(IServicesConfig servicesConfig)
         {
             return new DiagnosticsEventsServiceModel
             {
                 EventId = Guid.NewGuid().ToString(),
                 EventType = this.EventType,
                 EventProperties = this.EventProperties,
-                DeploymentId = "Undefined", // This will be replaced with actual deployment id
-                SolutionType = "Default", // This will be replaced with actual solution type
+                DeploymentId = servicesConfig.DeploymentId,
+                SolutionType = servicesConfig.SolutionType,
                 Timestamp = DateTimeOffset.UtcNow
             };
         }
