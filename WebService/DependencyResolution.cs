@@ -58,6 +58,9 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
             // TODO: read log level from configuration
             var logger = new Logger(Uptime.ProcessId);
             builder.RegisterInstance(logger).As<ILogger>().SingleInstance();
+
+            // Auth and CORS setup
+            Auth.Startup.SetupDependencies(builder, config);
         }
 
         private static void RegisterFactory(IContainer container)

@@ -41,7 +41,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Auth
     public class ClientAuthConfig : IClientAuthConfig
     {
         public string CorsWhitelist { get; set; }
-        public bool CorsEnabled => !string.IsNullOrEmpty(this.CorsWhitelist.Trim());
+        public bool CorsEnabled => !string.IsNullOrEmpty(this.CorsWhitelist?.Trim());
 
         public bool AuthRequired { get; set; }
         public string AuthType { get; set; }
