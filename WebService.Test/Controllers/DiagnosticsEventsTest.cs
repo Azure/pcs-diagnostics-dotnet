@@ -68,9 +68,13 @@ namespace WebService.Test.Controllers
         {
             // Arrange
             this.data.EventType = "MockEvent";
-            data.EventProperties = new Dictionary<string, object>();
-            data.EventProperties.Add("id", "elevator - 01");
-            data.EventProperties.Add("count", 1);
+            this.data.EventProperties = new Dictionary<string, object>();
+            this.data.EventProperties.Add("id", "elevator - 01");
+            this.data.EventProperties.Add("count", 1);
+            this.data.SessionId = 123;
+            this.data.UserProperties = new Dictionary<string, object>();
+            this.data.UserProperties.Add("Property1", "Value1");
+            this.data.UserProperties.Add("Property2", "Value2");
 
             this.logDiagnosticsService
                 .Setup(x => x.LogEventsAsync(It.IsAny<DiagnosticsEventsServiceModel>()))
@@ -84,6 +88,10 @@ namespace WebService.Test.Controllers
                 m => m.LogEventsAsync(It.Is<DiagnosticsEventsServiceModel>(arg => arg.EventType.Equals(this.data.EventType))));
             this.logDiagnosticsService.Verify(
                 m => m.LogEventsAsync(It.Is<DiagnosticsEventsServiceModel>(arg => arg.EventProperties.Equals(this.data.EventProperties))));
+            this.logDiagnosticsService.Verify(
+                m => m.LogEventsAsync(It.Is<DiagnosticsEventsServiceModel>(arg => arg.SessionId == this.data.SessionId)));
+            this.logDiagnosticsService.Verify(
+                m => m.LogEventsAsync(It.Is<DiagnosticsEventsServiceModel>(arg => arg.UserProperties.Equals(this.data.UserProperties))));
         }
     }
 }

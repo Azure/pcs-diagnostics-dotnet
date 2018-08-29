@@ -22,3 +22,15 @@ export PCS_SOLUTION_TYPE="Enter solution type here"
 
 # Unique id of solution deployment
 export PCS_DEPLOYMENT_ID="Enter deployment id here"
+
+# Subscription Id solution was deployed with
+export PCS_SUBSCRIPTION_ID="Enter Azure Subscription id here"
+
+# Cloud Type (ex. Global, China) solution was deployed in
+export PCS_CLOUD_TYPE="Enter cloud type here"
+
+# Name of IoT Hub used in solution
+export PCS_IOTHUB_NAME="Enter IoT Hub name here"
+
+# Name of solution
+export PCS_SOLUTION_NAME="Enter solution name here"

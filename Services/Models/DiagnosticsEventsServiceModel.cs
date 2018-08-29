@@ -24,9 +24,12 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models
         public DateTimeOffset Timestamp { get; set; }
 
         [JsonProperty(PropertyName = "SessionId", Order = 60)]
-        public string SessionId { get; set; }
+        public long? SessionId { get; set; }
 
         [JsonProperty(PropertyName = "EventProperties", Order = 70)]
         public Dictionary<string, object> EventProperties { get; set; }
+
+        [JsonProperty(PropertyName = "UserProperties", Order = 80)]
+        public Dictionary<string, object> UserProperties { get; set; }
     }
 }

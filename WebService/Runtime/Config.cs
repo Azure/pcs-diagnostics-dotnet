@@ -27,6 +27,10 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
         private const string DIAGNOSTICS_BACKEND_SERVICE_URI_KEY = APPLICATION_KEY + "endpoint_url";
         private const string PCS_SOLUTION_TYPE = APPLICATION_KEY + "solution_type";
         private const string PCS_DEPLOYMENT_ID = APPLICATION_KEY + "deployment_id";
+        private const string PCS_SUBSCRIPTION_ID = APPLICATION_KEY + "subscription_id";
+        private const string PCS_IOTHUB_NAME = APPLICATION_KEY + "iothub_name";
+        private const string PCS_CLOUD_TYPE = APPLICATION_KEY + "cloud_type";
+        private const string PCS_SOLUTION_NAME = APPLICATION_KEY + "solution_name";
 
         private const string CLIENT_AUTH_KEY = APPLICATION_KEY + "ClientAuth:";
         private const string CORS_WHITELIST_KEY = CLIENT_AUTH_KEY + "cors_whitelist";
@@ -56,7 +60,11 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
             {
                 DiagnosticsEndpointUrl = configData.GetString(DIAGNOSTICS_BACKEND_SERVICE_URI_KEY),
                 SolutionType = configData.GetString(PCS_SOLUTION_TYPE),
-                DeploymentId = configData.GetString(PCS_DEPLOYMENT_ID)
+                DeploymentId = configData.GetString(PCS_DEPLOYMENT_ID),
+                SubscriptionId = configData.GetString(PCS_SUBSCRIPTION_ID),
+                CloudType = configData.GetString(PCS_CLOUD_TYPE),
+                IoTHubName = configData.GetString(PCS_IOTHUB_NAME),
+                SolutionName = configData.GetString(PCS_SOLUTION_NAME)
             };
 
             this.ClientAuthConfig = new ClientAuthConfig
