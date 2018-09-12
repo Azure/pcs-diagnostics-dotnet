@@ -15,12 +15,14 @@ namespace Services.Test
     {
         private const string DIAGNOSTICS_SERVICE_URL = @"http://diagnostics";
         private readonly Mock<IDiagnosticsClient> diagnosticsClient;
+        private readonly Mock<IServicesConfig> servicesConfig;
         private readonly DiagnosticsEventsService target;
         private readonly DiagnosticsEventsServiceModel data;
 
         public DiagnosticsEventsServiceTest()
         {
             this.diagnosticsClient = new Mock<IDiagnosticsClient>();
+            this.servicesConfig = new Mock<IServicesConfig>();
             this.data = new DiagnosticsEventsServiceModel
             {
                 EventId = "MockEventId",
@@ -32,15 +34,19 @@ namespace Services.Test
 
             this.target = new DiagnosticsEventsService(
                 this.diagnosticsClient.Object,
+                this.servicesConfig.Object,
                 new Logger("UnitTest"));
         }
 
         [Fact]
         public void ItReturnsTrueOnSucceess()
         {
-            // Arrange
+           // Arrange
            this.diagnosticsClient
                 .Setup(x => x.SendAsync(It.IsAny<string>()))
+                .ReturnsAsync(true);
+            this.diagnosticsClient
+                .Setup(x => x.CheckUserConsentAsync())
                 .ReturnsAsync(true);
 
             // Act

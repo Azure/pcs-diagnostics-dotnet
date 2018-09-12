@@ -25,12 +25,14 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
         private const string APPLICATION_KEY = "diagnostics:";
         private const string PortKey = APPLICATION_KEY + "webservice_port";
         private const string DIAGNOSTICS_BACKEND_SERVICE_URI_KEY = APPLICATION_KEY + "endpoint_url";
+        private const string PCS_CONFIG_URL = APPLICATION_KEY + "pcs_config_url";
         private const string PCS_SOLUTION_TYPE = APPLICATION_KEY + "solution_type";
         private const string PCS_DEPLOYMENT_ID = APPLICATION_KEY + "deployment_id";
         private const string PCS_SUBSCRIPTION_ID = APPLICATION_KEY + "subscription_id";
         private const string PCS_IOTHUB_NAME = APPLICATION_KEY + "iothub_name";
         private const string PCS_CLOUD_TYPE = APPLICATION_KEY + "cloud_type";
         private const string PCS_SOLUTION_NAME = APPLICATION_KEY + "solution_name";
+        private const string USER_CONSENT_POLLING_INTERVAL_KEY = APPLICATION_KEY + "user_consent_polling_interval_seconds";
 
         private const string CLIENT_AUTH_KEY = APPLICATION_KEY + "ClientAuth:";
         private const string CORS_WHITELIST_KEY = CLIENT_AUTH_KEY + "cors_whitelist";
@@ -59,12 +61,14 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
             this.ServicesConfig = new ServicesConfig
             {
                 DiagnosticsEndpointUrl = configData.GetString(DIAGNOSTICS_BACKEND_SERVICE_URI_KEY),
+                PcsConfigUrl = configData.GetString(PCS_CONFIG_URL),
                 SolutionType = configData.GetString(PCS_SOLUTION_TYPE),
                 DeploymentId = configData.GetString(PCS_DEPLOYMENT_ID),
                 SubscriptionId = configData.GetString(PCS_SUBSCRIPTION_ID),
                 CloudType = configData.GetString(PCS_CLOUD_TYPE),
                 IoTHubName = configData.GetString(PCS_IOTHUB_NAME),
-                SolutionName = configData.GetString(PCS_SOLUTION_NAME)
+                SolutionName = configData.GetString(PCS_SOLUTION_NAME),
+                UserConsentPollingIntervalSecs = configData.GetInt(USER_CONSENT_POLLING_INTERVAL_KEY, 300)
             };
 
             this.ClientAuthConfig = new ClientAuthConfig
