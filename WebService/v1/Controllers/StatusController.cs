@@ -1,28 +1,34 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Diagnostics;
+using Microsoft.Azure.IoTSolutions.Diagnostics.Services;
+using Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime;
 using Microsoft.Azure.IoTSolutions.Diagnostics.WebService.v1.Filters;
 using Microsoft.Azure.IoTSolutions.Diagnostics.WebService.v1.Models;
+using System.Threading.Tasks;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.v1.Controllers
 {
-    [Route(Version.Path + "/[controller]"), TypeFilter(typeof(ExceptionsFilterAttribute))]
+    [Route(Version.PATH + "/[controller]"), TypeFilter(typeof(ExceptionsFilterAttribute))]
     public sealed class StatusController : Controller
     {
-        private readonly ILogger log;
+        private readonly IConfig config;
+        private readonly IStatusService statusService;
 
-        public StatusController(ILogger logger)
+        public StatusController(IConfig config, IStatusService statusService)
         {
-            this.log = logger;
+            this.statusService = statusService;
+            this.config = config;
         }
 
-        public StatusApiModel Get()
+        // TODO: reduce method complexity, refactor out some logic
+        [HttpGet]
+        public async Task<StatusApiModel> GetAsync()
         {
-            // TODO: calculate the actual service status
-            var isOk = true;
+            var result = new StatusApiModel(await this.statusService.GetStatusAsync());
 
-            return new StatusApiModel(isOk, "Alive and well");
+            result.Properties.Add("Port", this.config.Port.ToString());
+            return result;
         }
     }
 }

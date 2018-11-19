@@ -1,12 +1,15 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Diagnostics;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Http;
+using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
@@ -15,6 +18,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
     {
         Task<bool> SendAsync(string data);
         Task<bool> CheckUserConsentAsync();
+        Task<StatusResultServiceModel> PingDiagnosticsEndpointAsync();
+        Task<StatusResultServiceModel> PingConfigServiceAsync();
     }
 
     public class DiagnosticsClient : IDiagnosticsClient
@@ -28,6 +33,70 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
             this.httpClient = httpClient;
             this.config = config;
             this.logger = logger;
+        }
+
+        public async Task<StatusResultServiceModel> PingDiagnosticsEndpointAsync()
+        {
+            var result = new StatusResultServiceModel(false, "Diagnostics Azure Function check failed");
+            var endpointUrl = this.config.DiagnosticsEndpointUrl;
+            string data = "Ping Diagnostics service";
+            try
+            {
+                var request = new HttpRequest();
+                request.SetUriFromString(endpointUrl);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                request.SetContent(content);
+
+                var response = await this.httpClient.PostAsync(request);
+                if (response.IsError)
+                {
+                    result.Message = $"Status code: {response.StatusCode}; Response: {response.Content}";
+                }
+                else
+                {
+                    result.IsHealthy = true;
+                    result.Message = "Alive and Well!";
+                }
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(result.Message, () => new { e });
+            }
+
+            return result;
+        }
+
+        public async Task<StatusResultServiceModel> PingConfigServiceAsync()
+        {
+            var result = new StatusResultServiceModel(false, "Config check failed");
+            if (string.IsNullOrEmpty(this.config.PcsConfigUrl))
+            {
+                return result;
+            }
+
+            try
+            {
+                var pcsConfigUrl = this.config.PcsConfigUrl + "/status";
+                var request = new HttpRequest();
+                request.SetUriFromString(pcsConfigUrl);
+
+                IHttpResponse response = await this.httpClient.GetAsync(request);
+                if (response.IsError)
+                {
+                    result.Message = $"Status code: {response.StatusCode}; Response: {response.Content}";
+                }
+                else
+                {
+                    var data = JsonConvert.DeserializeObject<StatusServiceModel>(response.Content);
+                    result = data.Status;
+                }
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(result.Message, () => new { e });
+            }
+
+            return result;
         }
 
         public async Task<bool> SendAsync(string data)

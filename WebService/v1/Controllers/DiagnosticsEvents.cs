@@ -9,7 +9,7 @@ using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.v1.Controllers
 {
-    [Route(Version.Path + "/[controller]"), TypeFilter(typeof(ExceptionsFilterAttribute))]
+    [Route(Version.PATH + "/[controller]"), TypeFilter(typeof(ExceptionsFilterAttribute))]
     public sealed class DiagnosticsEvents : Controller
     {
         private readonly ILogDiagnostics logDiagnosticsService;
