@@ -12,6 +12,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime
         string IoTHubName { get; }
         string CloudType { get; }
         string SolutionName { get; }
+        string AppInsightsInstrumentationKey { get; }
         int UserConsentPollingIntervalSecs { get; }
     }
 
@@ -25,6 +26,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime
         public string IoTHubName { get; set; }
         public string CloudType { get; set; }
         public string SolutionName { get; set; }
+        public string AppInsightsInstrumentationKey { get; set; }
         public int UserConsentPollingIntervalSecs { get; set; }
     }
 }

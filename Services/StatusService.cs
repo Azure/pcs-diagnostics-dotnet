@@ -31,10 +31,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
             var result = new StatusServiceModel(true, "Alive and well!");
             var errors = new List<string>();
 
-            // Check access to Diagnostics Azure Function
-            var diagnosticsTuple = await this.diagnosticsClient.PingDiagnosticsEndpointAsync();
-            SetServiceStatus("DiagnosticsAzureFunction", diagnosticsTuple, result, errors);
-
             // Check access to Config
             // TODO: Circular dependency keeps calling this method indefinetely
             // var configTuple = await this.diagnosticsClient.pingConfigServiceAsync();
@@ -69,7 +65,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
                 errors.Add(dependencyName + " check failed");
                 result.Status.IsHealthy = false;
             }
-            
+
             result.Dependencies.Add(dependencyName, serviceResult);
         }
     }

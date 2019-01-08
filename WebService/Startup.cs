@@ -37,6 +37,9 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
             // Add controllers as services so they'll be resolved.
             services.AddMvc().AddControllersAsServices();
 
+            // Add Application Insights support
+            services.AddApplicationInsightsTelemetry();
+
             this.ApplicationContainer = DependencyResolution.Setup(services);
 
             // Create the IServiceProvider based on the container

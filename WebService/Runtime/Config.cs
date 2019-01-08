@@ -45,6 +45,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
         private const string JWT_AUDIENCE_KEY = JWT_KEY + "audience";
         private const string JWT_CLOCK_SKEW_KEY = JWT_KEY + "clock_skew_seconds";
 
+        private const string APPINSIGHTS_INSTRUMENTATION_KEY = APPLICATION_KEY + "appinsights_instrumentation_key";
+
         /// <summary>Web service listening port</summary>
         public int Port { get; }
 
@@ -68,7 +70,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
                 CloudType = configData.GetString(PCS_CLOUD_TYPE),
                 IoTHubName = configData.GetString(PCS_IOTHUB_NAME),
                 SolutionName = configData.GetString(PCS_SOLUTION_NAME),
-                UserConsentPollingIntervalSecs = configData.GetInt(USER_CONSENT_POLLING_INTERVAL_KEY, 300)
+                UserConsentPollingIntervalSecs = configData.GetInt(USER_CONSENT_POLLING_INTERVAL_KEY, 300),
+                AppInsightsInstrumentationKey = configData.GetString(APPINSIGHTS_INSTRUMENTATION_KEY)
             };
 
             this.ClientAuthConfig = new ClientAuthConfig
