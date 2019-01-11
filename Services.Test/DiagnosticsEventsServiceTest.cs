@@ -2,6 +2,7 @@
 
 using System;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services;
+using Microsoft.Azure.IoTSolutions.Diagnostics.Services.ApplicationInsights;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Diagnostics;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.External;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models;
@@ -16,6 +17,7 @@ namespace Services.Test
         private const string DIAGNOSTICS_SERVICE_URL = @"http://diagnostics";
         private readonly Mock<IDiagnosticsClient> diagnosticsClient;
         private readonly Mock<IServicesConfig> servicesConfig;
+        private readonly Mock<ITelemetryClientWrapper> mockTelemetryClientWrapper;
         private readonly DiagnosticsEventsService target;
         private readonly DiagnosticsEventsServiceModel data;
 
@@ -23,6 +25,7 @@ namespace Services.Test
         {
             this.diagnosticsClient = new Mock<IDiagnosticsClient>();
             this.servicesConfig = new Mock<IServicesConfig>();
+            this.mockTelemetryClientWrapper = new Mock<ITelemetryClientWrapper>();
             this.data = new DiagnosticsEventsServiceModel
             {
                 EventId = "MockEventId",
@@ -35,6 +38,7 @@ namespace Services.Test
             this.target = new DiagnosticsEventsService(
                 this.diagnosticsClient.Object,
                 this.servicesConfig.Object,
+                this.mockTelemetryClientWrapper.Object,
                 new Logger("UnitTest"));
         }
 

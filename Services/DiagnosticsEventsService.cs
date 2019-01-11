@@ -44,7 +44,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
             DateTimeOffset now = DateTimeOffset.UtcNow;
             TimeSpan duration = now - lastPolled;
 
-            //if (userConsent == null || duration.TotalSeconds >= this.servicesConfig.UserConsentPollingIntervalSecs)
+            if (userConsent == null || duration.TotalSeconds >= this.servicesConfig.UserConsentPollingIntervalSecs)
             {
                 try
                 {
@@ -64,6 +64,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
                 var appInsightsModelData = AppInsightsDataModel.FromServiceModel(serviceModelData);
                 this.telemetryClientWrapper.SetSessionAndDeploymentId(telemetryClient, appInsightsModelData);
                 this.telemetryClientWrapper.TrackEvent(telemetryClient, appInsightsModelData);
+
+                return true;
             }
 
             return false;
