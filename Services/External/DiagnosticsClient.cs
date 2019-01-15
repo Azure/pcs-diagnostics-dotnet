@@ -16,7 +16,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
 {
     public interface IDiagnosticsClient
     {
-        Task<bool> SendAsync(string data);
         Task<bool> CheckUserConsentAsync();
         Task<StatusResultServiceModel> PingConfigServiceAsync();
     }
@@ -66,24 +65,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
             }
 
             return result;
-        }
-
-        public async Task<bool> SendAsync(string data)
-        {
-            var endpointUrl = this.config.DiagnosticsEndpointUrl;
-
-            if (string.IsNullOrEmpty((endpointUrl)))
-            {
-                return false;
-            }
-
-            var request = new HttpRequest();
-            request.SetUriFromString(endpointUrl);
-            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
-            request.SetContent(content);
-            var response = await this.httpClient.PostAsync(request);
-
-            return response.IsSuccess;
         }
 
         public async Task<bool> CheckUserConsentAsync()

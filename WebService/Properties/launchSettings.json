@@ -5,7 +5,6 @@
             "launchBrowser": false,
             "launchUrl": "http://localhost:9006/v1/status",
             "environmentVariables": {
-                "PCS_DIAGNOSTICS_ENDPOINT_URL": "${PCS_DIAGNOSTICS_ENDPOINT_URL}",
                 "PCS_SOLUTION_TYPE": "${PCS_SOLUTION_TYPE}",
                 "PCS_DEPLOYMENT_ID": "${PCS_DEPLOYMENT_ID}",
                 "PCS_AUTH_REQUIRED": "false",

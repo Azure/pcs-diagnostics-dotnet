@@ -37,47 +37,6 @@ namespace Services.Test.External
         }
 
         [Fact]
-        public void ItReturnsTrueOnSucceess()
-        {
-            // Arrange
-            var response = new HttpResponse();
-
-            DiagnosticsClient target = new DiagnosticsClient(
-                this.mockHttpClient.Object,
-                new ServicesConfig
-                {
-                    DiagnosticsEndpointUrl = DIAGNOSTICS_SERVICE_URL
-                },
-                this.mockLogger.Object);
-
-            this.mockHttpClient
-                .Setup(x => x.PostAsync(It.IsAny<IHttpRequest>()))
-                .ReturnsAsync(response);
-
-            // Act
-            var result = target.SendAsync(JsonConvert.SerializeObject(this.data)).Result;
-
-            // Assert
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void ItReturnsFalseOnEmptyDiagnosticsEndpointUrl()
-        {
-            // Arrange
-            DiagnosticsClient target = new DiagnosticsClient(
-                this.mockHttpClient.Object,
-                new ServicesConfig(),
-                this.mockLogger.Object);
-
-            // Act
-            var result = target.SendAsync(JsonConvert.SerializeObject(this.data)).Result;
-
-            // Assert
-            Assert.False(result);
-        }
-
-        [Fact]
         public void ItShouldReturnTrueIfUserConsentWasSuccessfullyRetrieved()
         {
             // Arrange
@@ -120,7 +79,7 @@ namespace Services.Test.External
             this.mockHttpClient
                 .Setup(x => x.GetAsync(It.IsAny<IHttpRequest>()))
                 .ThrowsAsync(new Exception());
-            
+
             // Act
             var result = target.CheckUserConsentAsync().Result;
 

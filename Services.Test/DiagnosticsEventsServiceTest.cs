@@ -15,16 +15,16 @@ namespace Services.Test
     public class DiagnosticsEventsServiceTest
     {
         private const string DIAGNOSTICS_SERVICE_URL = @"http://diagnostics";
-        private readonly Mock<IDiagnosticsClient> diagnosticsClient;
-        private readonly Mock<IServicesConfig> servicesConfig;
+        private readonly Mock<IDiagnosticsClient> mockDiagnosticsClient;
+        private readonly Mock<IServicesConfig> mockServicesConfig;
         private readonly Mock<ITelemetryClientWrapper> mockTelemetryClientWrapper;
         private readonly DiagnosticsEventsService target;
         private readonly DiagnosticsEventsServiceModel data;
 
         public DiagnosticsEventsServiceTest()
         {
-            this.diagnosticsClient = new Mock<IDiagnosticsClient>();
-            this.servicesConfig = new Mock<IServicesConfig>();
+            this.mockDiagnosticsClient = new Mock<IDiagnosticsClient>();
+            this.mockServicesConfig = new Mock<IServicesConfig>();
             this.mockTelemetryClientWrapper = new Mock<ITelemetryClientWrapper>();
             this.data = new DiagnosticsEventsServiceModel
             {
@@ -36,8 +36,8 @@ namespace Services.Test
             };
 
             this.target = new DiagnosticsEventsService(
-                this.diagnosticsClient.Object,
-                this.servicesConfig.Object,
+                this.mockDiagnosticsClient.Object,
+                this.mockServicesConfig.Object,
                 this.mockTelemetryClientWrapper.Object,
                 new Logger("UnitTest"));
         }
@@ -46,10 +46,7 @@ namespace Services.Test
         public void ItReturnsTrueOnSucceess()
         {
            // Arrange
-           this.diagnosticsClient
-                .Setup(x => x.SendAsync(It.IsAny<string>()))
-                .ReturnsAsync(true);
-            this.diagnosticsClient
+            this.mockDiagnosticsClient
                 .Setup(x => x.CheckUserConsentAsync())
                 .ReturnsAsync(true);
 
@@ -61,11 +58,11 @@ namespace Services.Test
         }
 
         [Fact]
-        public void ItReturnsFalseOnFailure()
+        public void ItReturnsFalseIfUserHasOptedOut()
         {
             // Arrange
-            this.diagnosticsClient
-                .Setup(x => x.SendAsync(It.IsAny<string>()))
+            this.mockDiagnosticsClient
+                .Setup(x => x.CheckUserConsentAsync())
                 .ReturnsAsync(false);
 
             // Act
