@@ -24,7 +24,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
     {
         private const string APPLICATION_KEY = "diagnostics:";
         private const string PortKey = APPLICATION_KEY + "webservice_port";
-        private const string DIAGNOSTICS_BACKEND_SERVICE_URI_KEY = APPLICATION_KEY + "endpoint_url";
         private const string PCS_CONFIG_URL = APPLICATION_KEY + "pcs_config_url";
         private const string PCS_SOLUTION_TYPE = APPLICATION_KEY + "solution_type";
         private const string PCS_DEPLOYMENT_ID = APPLICATION_KEY + "deployment_id";
@@ -45,6 +44,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
         private const string JWT_AUDIENCE_KEY = JWT_KEY + "audience";
         private const string JWT_CLOCK_SKEW_KEY = JWT_KEY + "clock_skew_seconds";
 
+        private const string APPINSIGHTS_INSTRUMENTATION_KEY = APPLICATION_KEY + "appinsights_instrumentation_key";
+
         /// <summary>Web service listening port</summary>
         public int Port { get; }
 
@@ -60,7 +61,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
 
             this.ServicesConfig = new ServicesConfig
             {
-                DiagnosticsEndpointUrl = configData.GetString(DIAGNOSTICS_BACKEND_SERVICE_URI_KEY),
                 PcsConfigUrl = configData.GetString(PCS_CONFIG_URL),
                 SolutionType = configData.GetString(PCS_SOLUTION_TYPE),
                 DeploymentId = configData.GetString(PCS_DEPLOYMENT_ID),
@@ -68,7 +68,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Runtime
                 CloudType = configData.GetString(PCS_CLOUD_TYPE),
                 IoTHubName = configData.GetString(PCS_IOTHUB_NAME),
                 SolutionName = configData.GetString(PCS_SOLUTION_NAME),
-                UserConsentPollingIntervalSecs = configData.GetInt(USER_CONSENT_POLLING_INTERVAL_KEY, 300)
+                UserConsentPollingIntervalSecs = configData.GetInt(USER_CONSENT_POLLING_INTERVAL_KEY, 300),
+                AppInsightsInstrumentationKey = configData.GetString(APPINSIGHTS_INSTRUMENTATION_KEY)
             };
 
             this.ClientAuthConfig = new ClientAuthConfig

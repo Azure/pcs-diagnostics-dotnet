@@ -3,6 +3,8 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
+using Microsoft.Azure.IoTSolutions.Diagnostics.Services.ApplicationInsights;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Diagnostics;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.External;
 using Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models;
@@ -13,7 +15,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
 {
     public interface ILogDiagnostics
     {
-        Task<bool> LogEventsAsync(DiagnosticsEventsServiceModel data);
+        Task<bool> LogEventsAsync(DiagnosticsEventsServiceModel serviceModelData);
     }
 
     public class DiagnosticsEventsService : ILogDiagnostics
@@ -21,20 +23,23 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
         private readonly ILogger log;
         private readonly IDiagnosticsClient diagnosticsClient;
         private readonly IServicesConfig servicesConfig;
+        private readonly ITelemetryClientWrapper telemetryClientWrapper;
         private static DateTimeOffset lastPolled = DateTimeOffset.UtcNow;
         private static bool? userConsent = null;
 
         public DiagnosticsEventsService(
             IDiagnosticsClient diagnosticsClient,
             IServicesConfig servicesConfig,
+            ITelemetryClientWrapper telemetryClientWrapper,
             ILogger logger)
         {
             this.log = logger;
             this.diagnosticsClient = diagnosticsClient;
             this.servicesConfig = servicesConfig;
+            this.telemetryClientWrapper = telemetryClientWrapper;
         }
 
-        public async Task<bool> LogEventsAsync(DiagnosticsEventsServiceModel data)
+        public async Task<bool> LogEventsAsync(DiagnosticsEventsServiceModel serviceModelData)
         {
             DateTimeOffset now = DateTimeOffset.UtcNow;
             TimeSpan duration = now - lastPolled;
@@ -54,8 +59,21 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
 
             if (userConsent == true)
             {
-                string jsonData = JsonConvert.SerializeObject(data);
-                return await this.diagnosticsClient.SendAsync(jsonData);
+                try
+                {
+                    // Call out to App Insights
+                    TelemetryClient telemetryClient =
+                        this.telemetryClientWrapper.CreateTelemetryClient(this.servicesConfig);
+                    var appInsightsModelData = AppInsightsDataModel.FromServiceModel(serviceModelData);
+                    this.telemetryClientWrapper.SetSessionAndDeploymentId(telemetryClient, appInsightsModelData);
+                    this.telemetryClientWrapper.TrackEvent(telemetryClient, appInsightsModelData);
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    this.log.Error(e.Message, () => { });
+                }
             }
 
             return false;

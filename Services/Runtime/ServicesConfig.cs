@@ -4,7 +4,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime
 {
     public interface IServicesConfig
     {
-        string DiagnosticsEndpointUrl { get; }
         string PcsConfigUrl { get; }
         string SolutionType { get; }
         string DeploymentId { get; }
@@ -12,12 +11,12 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime
         string IoTHubName { get; }
         string CloudType { get; }
         string SolutionName { get; }
+        string AppInsightsInstrumentationKey { get; }
         int UserConsentPollingIntervalSecs { get; }
     }
 
     public class ServicesConfig : IServicesConfig
     {
-        public string DiagnosticsEndpointUrl { get; set; }
         public string PcsConfigUrl { get; set; }
         public string SolutionType { get; set; }
         public string DeploymentId { get; set; }
@@ -25,6 +24,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Runtime
         public string IoTHubName { get; set; }
         public string CloudType { get; set; }
         public string SolutionName { get; set; }
+        public string AppInsightsInstrumentationKey { get; set; }
         public int UserConsentPollingIntervalSecs { get; set; }
     }
 }

@@ -16,9 +16,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
 {
     public interface IDiagnosticsClient
     {
-        Task<bool> SendAsync(string data);
         Task<bool> CheckUserConsentAsync();
-        Task<StatusResultServiceModel> PingDiagnosticsEndpointAsync();
         Task<StatusResultServiceModel> PingConfigServiceAsync();
     }
 
@@ -35,36 +33,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
             this.logger = logger;
         }
 
-        public async Task<StatusResultServiceModel> PingDiagnosticsEndpointAsync()
-        {
-            var result = new StatusResultServiceModel(false, "Diagnostics Azure Function check failed");
-            var endpointUrl = this.config.DiagnosticsEndpointUrl;
-            string data = "Ping Diagnostics service";
-            try
-            {
-                var request = new HttpRequest();
-                request.SetUriFromString(endpointUrl);
-                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
-                request.SetContent(content);
-
-                var response = await this.httpClient.PostAsync(request);
-                if (response.IsError)
-                {
-                    result.Message = $"Status code: {response.StatusCode}; Response: {response.Content}";
-                }
-                else
-                {
-                    result.IsHealthy = true;
-                    result.Message = "Alive and Well!";
-                }
-            }
-            catch (Exception e)
-            {
-                this.logger.Error(result.Message, () => new { e });
-            }
-
-            return result;
-        }
 
         public async Task<StatusResultServiceModel> PingConfigServiceAsync()
         {
@@ -97,24 +65,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.External
             }
 
             return result;
-        }
-
-        public async Task<bool> SendAsync(string data)
-        {
-            var endpointUrl = this.config.DiagnosticsEndpointUrl;
-
-            if (string.IsNullOrEmpty((endpointUrl)))
-            {
-                return false;
-            }
-
-            var request = new HttpRequest();
-            request.SetUriFromString(endpointUrl);
-            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
-            request.SetContent(content);
-            var response = await this.httpClient.PostAsync(request);
-
-            return response.IsSuccess;
         }
 
         public async Task<bool> CheckUserConsentAsync()
