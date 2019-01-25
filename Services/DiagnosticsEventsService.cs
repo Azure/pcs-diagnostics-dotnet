@@ -59,13 +59,21 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services
 
             if (userConsent == true)
             {
-                // Call out to App Insights
-                TelemetryClient telemetryClient = this.telemetryClientWrapper.CreateTelemetryClient(this.servicesConfig);
-                var appInsightsModelData = AppInsightsDataModel.FromServiceModel(serviceModelData);
-                this.telemetryClientWrapper.SetSessionAndDeploymentId(telemetryClient, appInsightsModelData);
-                this.telemetryClientWrapper.TrackEvent(telemetryClient, appInsightsModelData);
+                try
+                {
+                    // Call out to App Insights
+                    TelemetryClient telemetryClient =
+                        this.telemetryClientWrapper.CreateTelemetryClient(this.servicesConfig);
+                    var appInsightsModelData = AppInsightsDataModel.FromServiceModel(serviceModelData);
+                    this.telemetryClientWrapper.SetSessionAndDeploymentId(telemetryClient, appInsightsModelData);
+                    this.telemetryClientWrapper.TrackEvent(telemetryClient, appInsightsModelData);
 
-                return true;
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    this.log.Error(e.Message, () => { });
+                }
             }
 
             return false;
