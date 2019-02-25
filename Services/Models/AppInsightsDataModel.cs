@@ -8,11 +8,13 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models
     {
         public string EventType { get; set; }
 
+        public string DeploymentId { get; set; }
+
+        public string SolutionType { get; set; }
+
         public long? SessionId { get; set; }
 
         public Dictionary<string, string> EventProperties { get; set; }
-
-        public string DeploymentId { get; set; }
 
         public static AppInsightsDataModel FromServiceModel(DiagnosticsEventsServiceModel model)
         {
@@ -21,7 +23,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.Services.Models
                 EventProperties = new Dictionary<string, string>(),
                 EventType = model.EventType,
                 SessionId = model.SessionId,
-                DeploymentId = model.DeploymentId
+                DeploymentId = model.DeploymentId,
+                SolutionType = model.SolutionType
             };
 
             if (model.EventProperties != null)
