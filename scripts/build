@@ -37,7 +37,7 @@ run_tests() {
 
     cd $APP_HOME
     header "Running tests..."
-    PROJECTS=$(dotnet sln iothub-manager.sln list | grep '\.Test')
+    PROJECTS=$(dotnet sln diagnostics.sln list | grep '\.Test')
 
     for PROJ in $PROJECTS; do
 	PROJ=${PROJ//\\/\/}
