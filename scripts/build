@@ -37,10 +37,13 @@ run_tests() {
 
     cd $APP_HOME
     header "Running tests..."
-    PROJECTS=$(dotnet sln list | grep 'csproj$' | grep '\.Test')
+    PROJECTS=$(dotnet sln iothub-manager.sln list | grep '\.Test')
+
     for PROJ in $PROJECTS; do
-        echo "-- $PROJ"
-        dotnet test --configuration $CONFIGURATION $PROJ
+	PROJ=${PROJ//\\/\/}
+	PROJ=$(echo $PROJ | sed 's/[^a-zA-Z\.\/]//g')
+	echo "-- $PROJ"
+	dotnet test --configuration $CONFIGURATION $PROJ
     done
 }
 
