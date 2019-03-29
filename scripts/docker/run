@@ -21,9 +21,9 @@ run_container() {
     # Depending on which settings and which dependencies are needed, edit the list of variables
     echo "Starting DIAGNOSTICS ..."
     docker run -it -p 9006:9006 \
-		-e PCS_KEYVAULT_NAME \
-		-e PCS_AAD_APPID \
-		-e PCS_AAD_APPSECRET \
+        -e PCS_KEYVAULT_NAME \
+        -e PCS_AAD_APPID \
+        -e PCS_AAD_APPSECRET \
         "$DOCKER_IMAGE:$APP_VERSION"
 }
 
