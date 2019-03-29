@@ -8,8 +8,8 @@ AUTH_TOKEN=""
 # Acquires auth token for authroizating against key vault.
 _acquire_token() {
     __set_keyvault_auth_server
-    local _local=$(curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "client_id=$PCS_AAD_APPID&resource=https%3A%2F%2Fvault.azure.net&client_secret=$PCS_AAD_APPSECRET&grant_type=client_credentials" $AUTH_SERVER_URL/oauth2/token)
-    AUTH_TOKEN=$(__parse_json $_local "access_token")
+    local _value=$(curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "client_id=$PCS_AAD_APPID&resource=https%3A%2F%2Fvault.azure.net&client_secret=$PCS_AAD_APPSECRET&grant_type=client_credentials" $AUTH_SERVER_URL/oauth2/token)
+    AUTH_TOKEN=$(__parse_json $_value "access_token")
 }
 
 # Fetch key vault secret.
@@ -60,16 +60,16 @@ __extract_resource_type() {
 __remove_double_quotes() {
     local input=$1
     # Remove trailing and prefixed double quotes.
-    local _local=${input#*'"'}
-    _local=${_local%'"'}
+    local _value=${input#*'"'}
+    _value=${_value%'"'}
 
     #return the value
-    echo $_local
+    echo $_value
 }
 
 __parse_json() {
-  _local=`echo $1 | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $2`;
-  echo ${_local##*|};
+  _value=`echo $1 | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $2`;
+  echo ${_value##*|};
 }
 
 ############# Main function #############
