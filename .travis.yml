@@ -1,5 +1,8 @@
 language: csharp
-dotnet: 3.1.302
+mono: none
+dotnet: 3.1
+install:
+  - dotnet restore
 dist: trusty
 sudo: false
 cache:
