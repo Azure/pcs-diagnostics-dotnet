@@ -4,10 +4,10 @@ using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.IoTSolutions.Diagnostics.WebService.Auth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
@@ -21,7 +21,7 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
         public IContainer ApplicationContainer { get; private set; }
 
         // Invoked by `Program.cs`
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -34,8 +34,11 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
         // Configure method below.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // Add controllers as services so they'll be resolved.
-            services.AddMvc().AddControllersAsServices();
+            // ASP.Net 2.2 -> 3.1 conversion
+            services.AddLogging(builder => builder.AddConsole());
+
+            // Enable controllers and enable Newtonsoft-compatibile JSON handling
+            services.AddControllers().AddNewtonsoftJson();
 
             // Add Application Insights support
             services.AddApplicationInsightsTelemetry();
@@ -50,12 +53,9 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
         // method above. Use this method to add middleware.
         public void Configure(
             IApplicationBuilder app,
-            IHostingEnvironment env,
-            ILoggerFactory loggerFactory,
             ICorsSetup corsSetup,
-            IApplicationLifetime appLifetime)
+            IHostApplicationLifetime appLifetime)
         {
-            loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
 
             // Check for Authorization header before dispatching requests
             app.UseMiddleware<AuthMiddleware>();
@@ -64,7 +64,8 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService
             // see: https://docs.microsoft.com/en-us/aspnet/core/security/cors
             corsSetup.UseMiddleware(app);
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
 
             // If you want to dispose of resources that have been resolved in the
             // application container, register for the "ApplicationStopped" event.

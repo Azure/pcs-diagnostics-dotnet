@@ -1,6 +1,4 @@
-FROM microsoft/dotnet:2.0.3-runtime-jessie
-
-MAINTAINER Devis Lucato (https://github.com/dluc)
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 
 ENTRYPOINT ["/bin/bash", "/app/run.sh"]
 
