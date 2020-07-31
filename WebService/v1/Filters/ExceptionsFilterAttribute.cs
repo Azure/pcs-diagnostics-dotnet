@@ -108,7 +108,6 @@ namespace Microsoft.Azure.IoTSolutions.Diagnostics.WebService.v1.Filters
 
             var result = new ObjectResult(error);
             result.StatusCode = (int) code;
-            result.Formatters.Add(new JsonOutputFormatter(new JsonSerializerSettings(), ArrayPool<char>.Shared));
 
             this.log.Error(e.Message, () => new { result.StatusCode });
 
